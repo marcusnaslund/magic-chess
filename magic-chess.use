@@ -1,0 +1,6 @@
+Name: Magic-Chess Demo Application
+Description: Magic-Chess Demo Application.
+SourcePath: .
+Main: main.ooc
+Imports: source/Piece
+Imports: source/Board

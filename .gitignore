@@ -30,3 +30,7 @@
 
 # Debug files
 *.dSYM/
+
+rock_tmp/
+main
+.libs/
