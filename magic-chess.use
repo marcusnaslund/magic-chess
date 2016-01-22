@@ -3,4 +3,6 @@ Description: Magic-Chess Demo Application.
 SourcePath: .
 Main: main.ooc
 Imports: source/Piece
+Imports: source/Move
 Imports: source/Board
+Imports: source/Play

@@ -1,4 +1,4 @@
-use ooc-base
+use base
 import Piece, Move
 
 Board: class {
@@ -34,7 +34,13 @@ Board: class {
         for (i in 0 .. 64)
             this pieces[i] = Piece Blank
     }
-    toString: func -> Text {
+    copy: func -> This {
+        result := This new()
+        for (i in 0 .. 64)
+            result pieces[i] = this pieces[i]
+        result
+    }
+    toText: func -> Text {
         result := TextBuilder new()
         result append(t"--------\n")
         for (row in 0 .. 8) {
@@ -61,7 +67,8 @@ Board: class {
         result join(t"")
     }
     doMove: func (move: Move) {
-        
+        this[move colTo, move rowTo] = this[move colFrom, move rowFrom]
+        this[move colFrom, move rowFrom] = Piece Blank
     }
     
     operator [] (col: Char, row: Int) -> Piece {
