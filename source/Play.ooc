@@ -14,23 +14,27 @@ Play: class {
     }    
     evaluate: func (level := 0) -> Float {
         this _calcMoves()
+        this score = this _heuristic()
         
         if (level > 0) {
             this _calcFuture()            
             for (i in 0 .. this nexts count)
                 this nexts[i] evaluate(level - 1)
-       
-            bestIndex := 0
-            for (i in 1 .. this nexts count) {
-                nextScore := this nexts[i] score
-                if ((this whiteToMove && nextScore > this nexts[bestIndex] score) ||
-                    (!this whiteToMove && nextScore < this nexts[bestIndex] score))
-                    bestIndex = i
+            
+            if (this moves count > 0) {
+                bestIndex := 0
+                for (i in 1 .. this nexts count) {
+                    nextScore := this nexts[i] score
+                    if ((this whiteToMove && nextScore > this nexts[bestIndex] score) ||
+                        (!this whiteToMove && nextScore < this nexts[bestIndex] score))
+                        bestIndex = i
+                }
+                this score = this nexts[bestIndex] score
             }
-            this score = this nexts[bestIndex] score
+            else {
+                this score = this whiteToMove ? Float minimumValue : Float maximumValue
+            }
         }
-        else
-            this score = this _heuristic()
 
         this score
     }
@@ -78,8 +82,6 @@ Play: class {
             this nexts add(Play new(this board copy(), !this whiteToMove, this moves[i]))
     }    
     _calcMoves: func {
-        //TODO: Must handle checks
-        
         this moves = VectorList<Move> new()
         for (_row in 0 .. 8) {
             for (_col in 0 .. 8) {
@@ -104,16 +106,15 @@ Play: class {
                     if (piece == Piece W_King) {
                         for (x in -1 .. 2)
                             for (y in -1 .. 2)
-                                if (x != 0 && y != 0) {
-                                    //TODO
-                                }
+                                if (this board[col + y, row + x] isBlack() || this board[col + y, row + x] == Piece Blank)
+                                    this moves add(Move new(col, row, col + y, row + x))
                     }
                 }
                 else {
                     if (piece == Piece B_Pawn)
                         this moves add(Move new(col, row, col, row - 1))
                     if (piece == Piece B_Pawn && row == 2)
-                        this moves add(Move new(col, row, col, row + 2))
+                        this moves add(Move new(col, row, col, row - 2))
                     if (piece == Piece B_Rook || piece == Piece B_Queen) {
                         //TODO
                     }
@@ -124,8 +125,28 @@ Play: class {
                         //TODO
                     }
                     if (piece == Piece B_King) {
-                        //TODO
+                        for (x in -1 .. 2)
+                            for (y in -1 .. 2)
+                                if (this board[col + y, row + x] isWhite() || this board[col + y, row + x] == Piece Blank)
+                                    this moves add(Move new(col, row, col + y, row + x))
                     }
+                }
+            }
+        }
+        
+        for (i in 0 .. this moves count) {
+            if (this moves[i] isValid) { // This works but I have no idea how
+                t"Invalid: " print()
+                this moves[i] toText() println()
+                this moves removeAt(i)
+                i -= 1
+            }
+            else {
+                next := this board copy()
+                next doMove(this moves[i])
+                if (!(next inCheck(this whiteToMove) && !next inCheck(!this whiteToMove))) {
+                    //this moves removeAt(i)
+                    //i -= 1
                 }
             }
         }

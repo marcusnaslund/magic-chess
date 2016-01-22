@@ -70,6 +70,23 @@ Board: class {
         this[move colTo, move rowTo] = this[move colFrom, move rowFrom]
         this[move colFrom, move rowFrom] = Piece Blank
     }
+    inCheck: func (white: Bool) -> Bool {
+        kingCol: Char = 'A'
+        kingRow: Int = 1
+        for (row in 0 .. 8)
+            for (col in 0 .. 8)
+                if ((white && this['A' + col, 8 - row] == Piece W_King) || (!white && this['A' + col, 8 - row] == Piece B_King))
+                    (kingCol, kingRow) = ('A' + col, 8 - row)
+        result := false
+        
+        //TODO: Check by opposite pawn?
+        //TODO: Check by opposite knight?
+        //TODO: Check by opposite rook/queen?
+        //TODO: Check by opposite bishop/queen?
+        //TODO: Check by opposite king? (To avoid king stepping in to check)
+        
+        result
+    }
     
     operator [] (col: Char, row: Int) -> Piece {
         _col: Int = (col - 'A')

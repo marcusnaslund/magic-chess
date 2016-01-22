@@ -12,4 +12,11 @@ Piece: enum {
     B_Queen
     W_King
     B_King
+    
+    isWhite: func -> Bool {
+        this == Piece W_Pawn || this == W_Rook || this == W_Knight || this == W_Bishop || this == W_Queen || this == W_King
+    }
+    isBlack: func -> Bool {
+        !this isWhite() && this != Piece Blank
+    }
 }
