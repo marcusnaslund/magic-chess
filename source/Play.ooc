@@ -16,11 +16,10 @@ Play: class {
         this _calcMoves()
         
         if (level > 0) {
-            this _calcFuture()
-            
+            this _calcFuture()            
             for (i in 0 .. this nexts count)
                 this nexts[i] evaluate(level - 1)
-            
+       
             bestIndex := 0
             for (i in 1 .. this nexts count) {
                 nextScore := this nexts[i] score
@@ -28,12 +27,10 @@ Play: class {
                     (!this whiteToMove && nextScore < this nexts[bestIndex] score))
                     bestIndex = i
             }
-
             this score = this nexts[bestIndex] score
         }
-        else {
+        else
             this score = this _heuristic()
-        }
 
         this score
     }
@@ -50,7 +47,29 @@ Play: class {
     
     _heuristic: func -> Float {
         result := 0.f
-        //TODO: Basic material
+        for (_row in 0 .. 8) {
+            for (_col in 0 .. 8) {
+                col := 'A' + _col
+                row: Int = 8 - _row
+                piece := this board[col, row]
+                if (piece == Piece W_Pawn)
+                    result += 1.0f
+                else if (piece == Piece B_Pawn)
+                    result -= 1.0f
+                else if (piece == Piece W_Knight || piece == Piece W_Bishop)
+                    result += 3.0f
+                else if (piece == Piece B_Knight || piece == Piece B_Bishop)
+                    result -= 3.0f
+                else if (piece == Piece W_Rook)
+                    result += 5.0f
+                else if (piece == Piece B_Rook)
+                    result -= 5.0f
+                else if (piece == Piece W_Queen)
+                    result += 9.0f
+                else if (piece == Piece B_Queen)
+                    result -= 9.0f
+            }
+        }
         result
     }
     _calcFuture: func {
@@ -59,6 +78,8 @@ Play: class {
             this nexts add(Play new(this board copy(), !this whiteToMove, this moves[i]))
     }    
     _calcMoves: func {
+        //TODO: Must handle checks
+        
         this moves = VectorList<Move> new()
         for (_row in 0 .. 8) {
             for (_col in 0 .. 8) {
