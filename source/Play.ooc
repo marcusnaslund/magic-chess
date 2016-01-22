@@ -18,11 +18,23 @@ Play: class {
         if (level > 0) {
             this _calcFuture()
             
-            //TODO if level > 0 evaluate all nexts, pick max/min of them
+            for (i in 0 .. this nexts count)
+                this nexts[i] evaluate(level - 1)
+            
+            bestIndex := 0
+            for (i in 1 .. this nexts count) {
+                nextScore := this nexts[i] score
+                if ((this whiteToMove && nextScore > this nexts[bestIndex] score) ||
+                    (!this whiteToMove && nextScore < this nexts[bestIndex] score))
+                    bestIndex = i
+            }
+
+            this score = this nexts[bestIndex] score
+        }
+        else {
+            this score = this _heuristic()
         }
 
-        //TODO heuristic
-        
         this score
     }
     toText: func -> Text {
@@ -36,6 +48,11 @@ Play: class {
         result join(t"")
     }
     
+    _heuristic: func -> Float {
+        result := 0.f
+        //TODO: Basic material
+        result
+    }
     _calcFuture: func {
         this nexts = VectorList<Play> new(this moves count)        
         for (i in 0 .. this moves count)
@@ -64,7 +81,11 @@ Play: class {
                         //TODO
                     }
                     if (piece == Piece W_King) {
-                        //TODO
+                        for (x in -1 .. 2)
+                            for (y in -1 .. 2)
+                                if (x != 0 && y != 0) {
+                                    //TODO
+                                }
                     }
                 }
                 else {
