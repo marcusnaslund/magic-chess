@@ -10,8 +10,8 @@ Board: class {
     init: func ~default {
         this clear()
         for (col in 0 .. 8) {
-            //this['A' + col, 2] = Piece W_Pawn
-            //this['A' + col, 7] = Piece B_Pawn
+            this['A' + col, 2] = Piece W_Pawn
+            this['A' + col, 7] = Piece B_Pawn
         }
         this['A', 1] = Piece W_Rook
         this['B', 1] = Piece W_Knight
