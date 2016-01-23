@@ -3,12 +3,11 @@ use magic-chess
 
 main: func (argc: Int, argv: CString*) {
     board := Board new~default()
-    //board toText() println()
     whiteToPlay := true
     play := Play new(board, whiteToPlay)
     
     steps := 0
-    while (steps < 100) {
+    while (steps < 1000) {
         play evaluate(2)
         play toText() println()
         

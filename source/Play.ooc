@@ -331,6 +331,8 @@ Play: class {
             }
         }
         
+        //TODO: Obvious bug: Capturing the king is not allowed :)
+        
         for (i in 0 .. this moves count) {
             if (this moves[i] isValid) { // This works but I have no idea how
                 //t"Invalid: " print()

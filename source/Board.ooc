@@ -83,15 +83,24 @@ Board: class {
             for (col in 0 .. 8)
                 if ((white && this['A' + col, 8 - row] == Piece W_King) || (!white && this['A' + col, 8 - row] == Piece B_King))
                     (kingCol, kingRow) = ('A' + col, 8 - row)
-        result := false
         
-        //TODO: Check by opposite pawn?
+        if (white && kingRow + 1 <= 8) {
+            if (kingCol - 1 >= 'A' && this pieces[kingCol - 1, kingRow + 1] == Piece B_Pawn) return true
+            if (kingCol + 1 <= 'H' && this pieces[kingCol + 1, kingRow + 1] == Piece B_Pawn) return true
+        }
+        if (!white && kingRow - 1 >= 1) {
+            if (kingCol - 1 >= 'A' && this pieces[kingCol - 1, kingRow - 1] == Piece W_Pawn) return true
+            if (kingCol + 1 <= 'H' && this pieces[kingCol + 1, kingRow - 1] == Piece W_Pawn) return true
+        }
+        
+        
+        
         //TODO: Check by opposite knight?
         //TODO: Check by opposite rook/queen?
         //TODO: Check by opposite bishop/queen?
         //TODO: Check by opposite king? (To avoid king stepping in to check)
         
-        result
+        return false
     }
     
     operator [] (col: Char, row: Int) -> Piece {
