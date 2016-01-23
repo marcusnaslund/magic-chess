@@ -6,3 +6,4 @@ Imports: source/Piece
 Imports: source/Move
 Imports: source/Board
 Imports: source/Play
+Imports: source/Game
