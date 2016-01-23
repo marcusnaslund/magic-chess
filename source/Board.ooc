@@ -85,12 +85,12 @@ Board: class {
                     (kingCol, kingRow) = ('A' + col, 8 - row)
         
         if (white && kingRow + 1 <= 8) {
-            if (kingCol - 1 >= 'A' && this pieces[kingCol - 1, kingRow + 1] == Piece B_Pawn) return true
-            if (kingCol + 1 <= 'H' && this pieces[kingCol + 1, kingRow + 1] == Piece B_Pawn) return true
+            if (kingCol - 1 >= 'A' && this[kingCol - 1, kingRow + 1] == Piece B_Pawn) return true
+            if (kingCol + 1 <= 'H' && this[kingCol + 1, kingRow + 1] == Piece B_Pawn) return true
         }
         if (!white && kingRow - 1 >= 1) {
-            if (kingCol - 1 >= 'A' && this pieces[kingCol - 1, kingRow - 1] == Piece W_Pawn) return true
-            if (kingCol + 1 <= 'H' && this pieces[kingCol + 1, kingRow - 1] == Piece W_Pawn) return true
+            if (kingCol - 1 >= 'A' && this[kingCol - 1, kingRow - 1] == Piece W_Pawn) return true
+            if (kingCol + 1 <= 'H' && this[kingCol + 1, kingRow - 1] == Piece W_Pawn) return true
         }
         
         
