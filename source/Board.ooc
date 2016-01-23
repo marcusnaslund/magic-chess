@@ -30,6 +30,10 @@ Board: class {
         this['G', 8] = Piece B_Knight
         this['H', 8] = Piece B_Rook
     }
+    free: override func {
+        this pieces free()
+        super()
+    }
     clear: func {
         for (i in 0 .. 64)
             this pieces[i] = Piece Blank
@@ -64,7 +68,9 @@ Board: class {
             result append(t"\n")
         } 
         result append(t"--------\n")
-        result join(t"")
+        text := result join(t"")
+        result free()
+        text
     }
     doMove: func (move: Move) {
         this[move colTo, move rowTo] = this[move colFrom, move rowFrom]

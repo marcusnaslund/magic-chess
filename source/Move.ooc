@@ -15,6 +15,8 @@ Move: class {
         result append(t"->")
         result append(Text new(colTo))
         result append(Text new(rowTo toString()))
-        result join(t"")
+        text := result join(t"")
+        result free()
+        text
     }
 }

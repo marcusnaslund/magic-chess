@@ -16,6 +16,20 @@ Play: class {
             this board doMove(move)
         }
     }    
+    free: override func {
+        if (this moves != null)
+            this moves free()
+        if (this nexts != null) {
+            for (i in 0 .. this nexts count - 1)
+                this nexts[i] free()
+            this nexts free()
+        }            
+        if (this board != null)
+            this board free()
+        /*if (this lastMove != null) //TODO
+            this lastMove free()*/
+        super()
+    }
     evaluate: func (level := 0) -> Float {
         this _calcMoves()
         this score = this _heuristic()
@@ -50,7 +64,9 @@ Play: class {
         result append(t", ")
         result append(this whiteToMove ? t"(w)" : t"(b)")
         result append(t"\n")
-        result join(t"")
+        text := result join(t"")
+        result free()
+        text
     }
     
     _heuristic: func -> Float {
@@ -79,10 +95,11 @@ Play: class {
                     result -= 9.0f
             }
         }
+        generator free()
         result
     }
     _calcFuture: func {
-        this nexts = VectorList<Play> new(this moves count)        
+        this nexts = VectorList<Play> new(this moves count, false)        
         for (i in 0 .. this moves count)
             this nexts add(Play new(this board copy(), !this whiteToMove, this moves[i]))
     }    
