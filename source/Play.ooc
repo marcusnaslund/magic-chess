@@ -31,9 +31,8 @@ Play: class {
                 }
                 this score = this nexts[bestIndex] score
             }
-            else {
+            else
                 this score = this whiteToMove ? Float minimumValue : Float maximumValue
-            }
         }
 
         this score
@@ -95,13 +94,94 @@ Play: class {
                     if (piece == Piece W_Pawn && row == 2)
                         this moves add(Move new(col, row, col, row + 2))
                     if (piece == Piece W_Rook || piece == Piece W_Queen) {
-                        //TODO
+                        x := col + 1
+                        while (x <= 'H') {
+                            if (this board[x, row] isWhite())
+                                break
+                            this moves add(Move new(col, row, x, row))
+                            if (this board[x, row] isBlack())
+                                break
+                            x = x + 1
+                        }
+                        x = col - 1
+                        while (x >= 'A') {
+                            if (this board[x, row] isWhite())
+                                break
+                            this moves add(Move new(col, row, x, row))
+                            if (this board[x, row] isBlack())
+                                break
+                            x = x - 1
+                        }
+                        y := row + 1
+                        while (y <= 8) {
+                            if (this board[col, y] isWhite())
+                                break
+                            this moves add(Move new(col, row, col, y))
+                            if (this board[col, y] isBlack())
+                                break
+                            y = y + 1
+                        }
+                        y = row - 1
+                        while (y >= 1) {
+                            if (this board[col, y] isWhite())
+                                break
+                            this moves add(Move new(col, row, col, y))
+                            if (this board[col, y] isBlack())
+                                break
+                            y = y - 1
+                        }
                     }
                     if (piece == Piece W_Bishop || piece == Piece W_Queen) {
-                        //TODO
+                        (x, y) := (col + 1, row + 1)
+                        while (x <= 'H' && y <= 8) {
+                            if (this board[x, y] isWhite())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isBlack())
+                                break
+                            (x, y) = (x + 1, y + 1)
+                        }
+                        (x, y) = (col + 1, row - 1)
+                        while (x <= 'H' && y >= 1) {
+                            if (this board[x, y] isWhite())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isBlack())
+                                break
+                            (x, y) = (x + 1, y - 1)
+                        }
+                        (x, y) = (col - 1, row + 1)
+                        while (x >= 'A' && y <= 8) {
+                            if (this board[x, y] isWhite())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isBlack())
+                                break
+                            (x, y) = (x - 1, y + 1)
+                        }
+                        (x, y) = (col - 1, row - 1)
+                        while (x >= 'A' && y >= 1) {
+                            if (this board[x, y] isWhite())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isBlack())
+                                break
+                            (x, y) = (x - 1, y - 1)
+                        }
+                        
                     }
                     if (piece == Piece W_Knight) {
                         //TODO
+                        /*
+                        this moves add(Move new(col, row, col + 1, row + 2))
+                        this moves add(Move new(col, row, col + 1, row - 2))
+                        this moves add(Move new(col, row, col - 1, row + 2))
+                        this moves add(Move new(col, row, col - 1, row - 2))
+                        this moves add(Move new(col, row, col + 2, row + 1))
+                        this moves add(Move new(col, row, col + 2, row - 1))
+                        this moves add(Move new(col, row, col - 2, row + 1))
+                        this moves add(Move new(col, row, col - 2, row - 1))
+                        */
                     }
                     if (piece == Piece W_King) {
                         for (x in -1 .. 2)
@@ -113,13 +193,83 @@ Play: class {
                 else {
                     if (piece == Piece B_Pawn)
                         this moves add(Move new(col, row, col, row - 1))
-                    if (piece == Piece B_Pawn && row == 2)
+                    if (piece == Piece B_Pawn && row == 7)
                         this moves add(Move new(col, row, col, row - 2))
                     if (piece == Piece B_Rook || piece == Piece B_Queen) {
-                        //TODO
+                        x := col + 1
+                        while (x <= 'H') {
+                            if (this board[x, row] isBlack())
+                                break
+                            this moves add(Move new(col, row, x, row))
+                            if (this board[x, row] isWhite())
+                                break
+                            x = x + 1
+                        }
+                        x = col - 1
+                        while (x >= 'A') {
+                            if (this board[x, row] isBlack())
+                                break
+                            this moves add(Move new(col, row, x, row))
+                            if (this board[x, row] isWhite())
+                                break
+                            x = x - 1
+                        }
+                        y := row + 1
+                        while (y <= 8) {
+                            if (this board[col, y] isBlack())
+                                break
+                            this moves add(Move new(col, row, col, y))
+                            if (this board[col, y] isWhite())
+                                break
+                            y = y + 1
+                        }
+                        y = row - 1
+                        while (y >= 1) {
+                            if (this board[col, y] isBlack())
+                                break
+                            this moves add(Move new(col, row, col, y))
+                            if (this board[col, y] isWhite())
+                                break
+                            y = y - 1
+                        }
                     }
                     if (piece == Piece B_Bishop || piece == Piece B_Queen) {
-                        //TODO
+                        (x, y) := (col + 1, row + 1)
+                        while (x <= 'H' && y <= 8) {
+                            if (this board[x, y] isBlack())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isWhite())
+                                break
+                            (x, y) = (x + 1, y + 1)
+                        }
+                        (x, y) = (col + 1, row - 1)
+                        while (x <= 'H' && y >= 1) {
+                            if (this board[x, y] isBlack())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isWhite())
+                                break
+                            (x, y) = (x + 1, y - 1)
+                        }
+                        (x, y) = (col - 1, row + 1)
+                        while (x >= 'A' && y <= 8) {
+                            if (this board[x, y] isBlack())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isWhite())
+                                break
+                            (x, y) = (x - 1, y + 1)
+                        }
+                        (x, y) = (col - 1, row - 1)
+                        while (x >= 'A' && y >= 1) {
+                            if (this board[x, y] isBlack())
+                                break
+                            this moves add(Move new(col, row, x, y))
+                            if (this board[x, y] isWhite())
+                                break
+                            (x, y) = (x - 1, y - 1)
+                        }
                     }
                     if (piece == Piece B_Knight) {
                         //TODO
@@ -144,9 +294,9 @@ Play: class {
             else {
                 next := this board copy()
                 next doMove(this moves[i])
-                if (!(next inCheck(this whiteToMove) && !next inCheck(!this whiteToMove))) {
-                    //this moves removeAt(i)
-                    //i -= 1
+                if (!(next inCheck(!this whiteToMove) || !next inCheck(this whiteToMove))) {
+                    this moves removeAt(i)
+                    i -= 1
                 }
             }
         }
