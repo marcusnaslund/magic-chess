@@ -75,6 +75,17 @@ Board: class {
     doMove: func (move: Move) {
         this[move colTo, move rowTo] = this[move colFrom, move rowFrom]
         this[move colFrom, move rowFrom] = Piece Blank
+        this promote()
+    }
+    promote: func {
+        for (i in 0 .. 8) {
+            // TODO: Handle promotion to other pieces than queen
+            
+            if (this['A' + i, 1] == Piece B_Pawn)
+                this['A' + i, 1] = Piece B_Queen
+            if (this['A' + i, 8] == Piece W_Pawn)
+                this['A' + i, 8] = Piece W_Queen
+        }
     }
     inCheck: func (white: Bool) -> Bool {
         kingCol: Char = 'A'
@@ -84,6 +95,7 @@ Board: class {
                 if ((white && this['A' + col, 8 - row] == Piece W_King) || (!white && this['A' + col, 8 - row] == Piece B_King))
                     (kingCol, kingRow) = ('A' + col, 8 - row)
         
+        // Check by opposite pawn?
         if (white && kingRow + 1 <= 8) {
             if (kingCol - 1 >= 'A' && this[kingCol - 1, kingRow + 1] == Piece B_Pawn) return true
             if (kingCol + 1 <= 'H' && this[kingCol + 1, kingRow + 1] == Piece B_Pawn) return true
@@ -93,12 +105,79 @@ Board: class {
             if (kingCol + 1 <= 'H' && this[kingCol + 1, kingRow - 1] == Piece W_Pawn) return true
         }
         
+        // Check by opposite rook/queen?
+        x := kingCol + 1
+        while (x <= 'H') {
+            if (white && (this[x, kingRow] == Piece B_Rook || this[x, kingRow] == Piece B_Queen)) return true
+            if (!white && (this[x, kingRow] == Piece W_Rook || this[x, kingRow] == Piece W_Queen)) return true
+            if (this [x, kingRow] != Piece Blank) break
+            x = x + 1
+        }
+        x = kingCol - 1
+        while (x >= 'A') {
+            if (white && (this[x, kingRow] == Piece B_Rook || this[x, kingRow] == Piece B_Queen)) return true
+            if (!white && (this[x, kingRow] == Piece W_Rook || this[x, kingRow] == Piece W_Queen)) return true
+            if (this [x, kingRow] != Piece Blank) break
+            x = x - 1
+        }
+        y := kingRow + 1
+        while (y <= 8) {
+            if (white && (this[kingCol, y] == Piece B_Rook || this[kingCol, y] == Piece B_Queen)) return true
+            if (!white && (this[kingCol, y] == Piece W_Rook || this[kingCol, y] == Piece W_Queen)) return true
+            if (this [kingCol, y] != Piece Blank) break
+            y = y + 1
+        }
+        y = kingRow - 1
+        while (y >= 1) {
+            if (white && (this[kingCol, y] == Piece B_Rook || this[kingCol, y] == Piece B_Queen)) return true
+            if (!white && (this[kingCol, y] == Piece W_Rook || this[kingCol, y] == Piece W_Queen)) return true
+            if (this [kingCol, y] != Piece Blank) break
+            y = y + 1
+        }
         
+        // Check by opposite bishop/queen?
+        x = kingCol + 1
+        y = kingRow + 1
+        while (x <= 'H' && y <= 8) {
+            if (white && (this[x, y] == Piece B_Bishop || this[x, y] == Piece B_Queen)) return true
+            if (!white && (this[x, y] == Piece W_Bishop || this[x, y] == Piece W_Queen)) return true
+            (x, y) = (x + 1, y + 1)
+        }
+        x = kingCol + 1
+        y = kingRow - 1
+        while (x <= 'H' && y >= 1) {
+            if (white && (this[x, y] == Piece B_Bishop || this[x, y] == Piece B_Queen)) return true
+            if (!white && (this[x, y] == Piece W_Bishop || this[x, y] == Piece W_Queen)) return true
+            (x, y) = (x + 1, y - 1)
+        }
+        x = kingCol - 1
+        y = kingRow - 1
+        while (x >= 'A' && y >= 1) {
+            if (white && (this[x, y] == Piece B_Bishop || this[x, y] == Piece B_Queen)) return true
+            if (!white && (this[x, y] == Piece W_Bishop || this[x, y] == Piece W_Queen)) return true
+            (x, y) = (x - 1, y - 1)
+        }
+        x = kingCol - 1
+        y = kingRow + 1
+        while (x >= 'A' && y <= 8) {
+            if (white && (this[x, y] == Piece B_Bishop || this[x, y] == Piece B_Queen)) return true
+            if (!white && (this[x, y] == Piece W_Bishop || this[x, y] == Piece W_Queen)) return true
+            (x, y) = (x - 1, y + 1)
+        }
         
         //TODO: Check by opposite knight?
-        //TODO: Check by opposite rook/queen?
-        //TODO: Check by opposite bishop/queen?
-        //TODO: Check by opposite king? (To avoid king stepping in to check)
+        
+        
+        // Check by opposite king? (To avoid king stepping in to check)
+        for (_col in -1 .. 2)
+            for (_row in -1 .. 2) {
+                col := kingCol + _col
+                row := kingRow + _row
+                if (col >= 'A' && col <= 'H' && row >= 1 && row <= 8) {
+                    if ((white && this[col, row] == Piece B_King) || (!white && this[col, row] == Piece W_King))
+                        return true
+                }
+            }
         
         return false
     }
