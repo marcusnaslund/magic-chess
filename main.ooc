@@ -8,7 +8,7 @@ main: func (argc: Int, argv: CString*) {
     
     steps := 0
     while (steps < 1000) {
-        play evaluate(2)
+        play evaluate(1)
         play toText() println()
         
         for (i in 0 .. play moves count) {
@@ -27,5 +27,7 @@ main: func (argc: Int, argv: CString*) {
         play = Play new(next, whiteToPlay)
         
         steps = steps + 1
+        
+        Time sleepMilli(1000)
     }
 }

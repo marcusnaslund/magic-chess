@@ -104,6 +104,7 @@ Play: class {
             this nexts add(Play new(this board copy(), !this whiteToMove, this moves[i]))
     }    
     _calcMoves: func {
+        tempMoves := VectorList<Move> new(32, false)
         this moves = VectorList<Move> new()
         for (_row in 0 .. 8) {
             for (_col in 0 .. 8) {
@@ -113,16 +114,16 @@ Play: class {
                 
                 if (this whiteToMove) {
                     if (piece == Piece W_Pawn)
-                        this moves add(Move new(col, row, col, row + 1))
+                        tempMoves add(Move new(col, row, col, row + 1))
                     if (piece == Piece W_Pawn && row == 2)
-                        this moves add(Move new(col, row, col, row + 2))
+                        tempMoves add(Move new(col, row, col, row + 2))
                     //TODO: Add en passant
                     if (piece == Piece W_Rook || piece == Piece W_Queen) {
                         x := col + 1
                         while (x <= 'H') {
                             if (this board[x, row] isWhite())
                                 break
-                            this moves add(Move new(col, row, x, row))
+                            tempMoves add(Move new(col, row, x, row))
                             if (this board[x, row] isBlack())
                                 break
                             x = x + 1
@@ -131,7 +132,7 @@ Play: class {
                         while (x >= 'A') {
                             if (this board[x, row] isWhite())
                                 break
-                            this moves add(Move new(col, row, x, row))
+                            tempMoves add(Move new(col, row, x, row))
                             if (this board[x, row] isBlack())
                                 break
                             x = x - 1
@@ -140,7 +141,7 @@ Play: class {
                         while (y <= 8) {
                             if (this board[col, y] isWhite())
                                 break
-                            this moves add(Move new(col, row, col, y))
+                            tempMoves add(Move new(col, row, col, y))
                             if (this board[col, y] isBlack())
                                 break
                             y = y + 1
@@ -149,7 +150,7 @@ Play: class {
                         while (y >= 1) {
                             if (this board[col, y] isWhite())
                                 break
-                            this moves add(Move new(col, row, col, y))
+                            tempMoves add(Move new(col, row, col, y))
                             if (this board[col, y] isBlack())
                                 break
                             y = y - 1
@@ -160,7 +161,7 @@ Play: class {
                         while (x <= 'H' && y <= 8) {
                             if (this board[x, y] isWhite())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isBlack())
                                 break
                             (x, y) = (x + 1, y + 1)
@@ -169,7 +170,7 @@ Play: class {
                         while (x <= 'H' && y >= 1) {
                             if (this board[x, y] isWhite())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isBlack())
                                 break
                             (x, y) = (x + 1, y - 1)
@@ -178,7 +179,7 @@ Play: class {
                         while (x >= 'A' && y <= 8) {
                             if (this board[x, y] isWhite())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isBlack())
                                 break
                             (x, y) = (x - 1, y + 1)
@@ -187,7 +188,7 @@ Play: class {
                         while (x >= 'A' && y >= 1) {
                             if (this board[x, y] isWhite())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isBlack())
                                 break
                             (x, y) = (x - 1, y - 1)
@@ -196,42 +197,42 @@ Play: class {
                     }
                     if (piece == Piece W_Knight) {
                         if (col + 1 <= 'H' && row + 2 <= 8 && !this board[col + 1, row + 2] isWhite())
-                            this moves add(Move new(col, row, col + 1, row + 2))
+                            tempMoves add(Move new(col, row, col + 1, row + 2))
                         if (col + 2 <= 'H' && row + 1 <= 8 && !this board[col + 2, row + 1] isWhite())
-                            this moves add(Move new(col, row, col + 2, row + 1))
+                            tempMoves add(Move new(col, row, col + 2, row + 1))
                         if (col + 1 <= 'H' && row - 2 >= 1 && !this board[col + 1, row - 2] isWhite())
-                            this moves add(Move new(col, row, col + 1, row - 2))
+                            tempMoves add(Move new(col, row, col + 1, row - 2))
                         if (col + 2 <= 'H' && row - 1 >= 1 && !this board[col + 2, row - 1] isWhite())
-                            this moves add(Move new(col, row, col + 2, row - 1))
+                            tempMoves add(Move new(col, row, col + 2, row - 1))
                             
                         if (col - 1 >= 'A' && row + 2 <= 8 && !this board[col - 1, row + 2] isWhite())
-                            this moves add(Move new(col, row, col - 1, row + 2))
+                            tempMoves add(Move new(col, row, col - 1, row + 2))
                         if (col - 2 >= 'A' && row + 1 <= 8 && !this board[col - 2, row + 1] isWhite())
-                            this moves add(Move new(col, row, col - 2, row + 1))
+                            tempMoves add(Move new(col, row, col - 2, row + 1))
                         if (col - 1 >= 'A' && row - 2 >= 1 && !this board[col - 1, row - 2] isWhite())
-                            this moves add(Move new(col, row, col - 1, row - 2))
+                            tempMoves add(Move new(col, row, col - 1, row - 2))
                         if (col - 2 >= 'A' && row - 1 >= 1 && !this board[col - 2, row - 1] isWhite())
-                            this moves add(Move new(col, row, col - 2, row - 1))
+                            tempMoves add(Move new(col, row, col - 2, row - 1))
                     }
                     if (piece == Piece W_King) {
                         for (x in -1 .. 2)
                             for (y in -1 .. 2)
                                 if (this board[col + y, row + x] isBlack() || this board[col + y, row + x] == Piece Blank)
-                                    this moves add(Move new(col, row, col + y, row + x))
+                                    tempMoves add(Move new(col, row, col + y, row + x))
                     }
                 }
                 else {
                     if (piece == Piece B_Pawn)
-                        this moves add(Move new(col, row, col, row - 1))
+                        tempMoves add(Move new(col, row, col, row - 1))
                     if (piece == Piece B_Pawn && row == 7)
-                        this moves add(Move new(col, row, col, row - 2))
+                        tempMoves add(Move new(col, row, col, row - 2))
                     //TODO: Add en passant
                     if (piece == Piece B_Rook || piece == Piece B_Queen) {
                         x := col + 1
                         while (x <= 'H') {
                             if (this board[x, row] isBlack())
                                 break
-                            this moves add(Move new(col, row, x, row))
+                            tempMoves add(Move new(col, row, x, row))
                             if (this board[x, row] isWhite())
                                 break
                             x = x + 1
@@ -240,7 +241,7 @@ Play: class {
                         while (x >= 'A') {
                             if (this board[x, row] isBlack())
                                 break
-                            this moves add(Move new(col, row, x, row))
+                            tempMoves add(Move new(col, row, x, row))
                             if (this board[x, row] isWhite())
                                 break
                             x = x - 1
@@ -249,7 +250,7 @@ Play: class {
                         while (y <= 8) {
                             if (this board[col, y] isBlack())
                                 break
-                            this moves add(Move new(col, row, col, y))
+                            tempMoves add(Move new(col, row, col, y))
                             if (this board[col, y] isWhite())
                                 break
                             y = y + 1
@@ -258,7 +259,7 @@ Play: class {
                         while (y >= 1) {
                             if (this board[col, y] isBlack())
                                 break
-                            this moves add(Move new(col, row, col, y))
+                            tempMoves add(Move new(col, row, col, y))
                             if (this board[col, y] isWhite())
                                 break
                             y = y - 1
@@ -269,7 +270,7 @@ Play: class {
                         while (x <= 'H' && y <= 8) {
                             if (this board[x, y] isBlack())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isWhite())
                                 break
                             (x, y) = (x + 1, y + 1)
@@ -278,7 +279,7 @@ Play: class {
                         while (x <= 'H' && y >= 1) {
                             if (this board[x, y] isBlack())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isWhite())
                                 break
                             (x, y) = (x + 1, y - 1)
@@ -287,7 +288,7 @@ Play: class {
                         while (x >= 'A' && y <= 8) {
                             if (this board[x, y] isBlack())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isWhite())
                                 break
                             (x, y) = (x - 1, y + 1)
@@ -296,7 +297,7 @@ Play: class {
                         while (x >= 'A' && y >= 1) {
                             if (this board[x, y] isBlack())
                                 break
-                            this moves add(Move new(col, row, x, y))
+                            tempMoves add(Move new(col, row, x, y))
                             if (this board[x, y] isWhite())
                                 break
                             (x, y) = (x - 1, y - 1)
@@ -304,28 +305,28 @@ Play: class {
                     }
                     if (piece == Piece B_Knight) {
                         if (col + 1 <= 'H' && row + 2 <= 8 && !this board[col + 1, row + 2] isBlack())
-                            this moves add(Move new(col, row, col + 1, row + 2))
+                            tempMoves add(Move new(col, row, col + 1, row + 2))
                         if (col + 2 <= 'H' && row + 1 <= 8 && !this board[col + 2, row + 1] isBlack())
-                            this moves add(Move new(col, row, col + 2, row + 1))
+                            tempMoves add(Move new(col, row, col + 2, row + 1))
                         if (col + 1 <= 'H' && row - 2 >= 1 && !this board[col + 1, row - 2] isBlack())
-                            this moves add(Move new(col, row, col + 1, row - 2))
+                            tempMoves add(Move new(col, row, col + 1, row - 2))
                         if (col + 2 <= 'H' && row - 1 >= 1 && !this board[col + 2, row - 1] isBlack())
-                            this moves add(Move new(col, row, col + 2, row - 1))
+                            tempMoves add(Move new(col, row, col + 2, row - 1))
                             
                         if (col - 1 >= 'A' && row + 2 <= 8 && !this board[col - 1, row + 2] isBlack())
-                            this moves add(Move new(col, row, col - 1, row + 2))
+                            tempMoves add(Move new(col, row, col - 1, row + 2))
                         if (col - 2 >= 'A' && row + 1 <= 8 && !this board[col - 2, row + 1] isBlack())
-                            this moves add(Move new(col, row, col - 2, row + 1))
+                            tempMoves add(Move new(col, row, col - 2, row + 1))
                         if (col - 1 >= 'A' && row - 2 >= 1 && !this board[col - 1, row - 2] isBlack())
-                            this moves add(Move new(col, row, col - 1, row - 2))
+                            tempMoves add(Move new(col, row, col - 1, row - 2))
                         if (col - 2 >= 'A' && row - 1 >= 1 && !this board[col - 2, row - 1] isBlack())
-                            this moves add(Move new(col, row, col - 2, row - 1))
+                            tempMoves add(Move new(col, row, col - 2, row - 1))
                     }
                     if (piece == Piece B_King) {
                         for (x in -1 .. 2)
                             for (y in -1 .. 2)
                                 if (this board[col + y, row + x] isWhite() || this board[col + y, row + x] == Piece Blank)
-                                    this moves add(Move new(col, row, col + y, row + x))
+                                    tempMoves add(Move new(col, row, col + y, row + x))
                     }
                 }
             }
@@ -333,21 +334,29 @@ Play: class {
         
         //TODO: Obvious bug: Capturing the king is not allowed :)
         
-        for (i in 0 .. this moves count) {
-            if (this moves[i] isValid) { // This works but I have no idea how
+        
+        for (i in 0 .. tempMoves count) {
+            move := tempMoves[i]
+            if (tempMoves[i] isValid) { // This works but I have no idea how
                 //t"Invalid: " print()
-                //this moves[i] toText() println()
-                this moves removeAt(i)
-                i -= 1
+                //move toText() println()
+                continue
+            }
+            else if (this board[move colTo, move rowTo] == Piece W_King || this board[move colTo, move rowTo] == Piece B_King) {
+                continue
             }
             else {
                 next := this board copy()
-                next doMove(this moves[i])
+                next doMove(move)
                 if (!(next inCheck(!this whiteToMove) || !next inCheck(this whiteToMove))) {
-                    this moves removeAt(i)
-                    i -= 1
+                    continue
+                }
+                else {
+                    this moves add(move)
                 }
             }
         }
+        
+        tempMoves free()
     }
 }

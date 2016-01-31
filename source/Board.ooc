@@ -165,7 +165,15 @@ Board: class {
             (x, y) = (x - 1, y + 1)
         }
         
-        //TODO: Check by opposite knight?
+        // Check by opposite knight?
+        if ((x - 1 >= 'A' && y - 2 >= 1) && ((white && this[x - 1 , y - 2] == Piece B_Knight) || (!white && this[x - 1, y - 2] == Piece W_Knight))) return true
+        if ((x + 1 <= 'H' && y - 2 >= 1) && ((white && this[x + 1 , y - 2] == Piece B_Knight) || (!white && this[x + 1, y - 2] == Piece W_Knight))) return true
+        if ((x - 1 >= 'A' && y + 2 <= 8) && ((white && this[x - 1 , y + 2] == Piece B_Knight) || (!white && this[x - 1, y + 2] == Piece W_Knight))) return true
+        if ((x + 1 <= 'H' && y + 2 <= 8) && ((white && this[x + 1 , y + 2] == Piece B_Knight) || (!white && this[x + 1, y + 2] == Piece W_Knight))) return true
+        if ((x - 2 >= 'A' && y - 1 >= 1) && ((white && this[x - 2 , y - 1] == Piece B_Knight) || (!white && this[x - 2, y - 1] == Piece W_Knight))) return true
+        if ((x + 2 <= 'H' && y - 1 >= 1) && ((white && this[x + 2 , y - 1] == Piece B_Knight) || (!white && this[x + 2, y - 1] == Piece W_Knight))) return true
+        if ((x - 2 >= 'A' && y + 1 <= 8) && ((white && this[x - 2 , y + 1] == Piece B_Knight) || (!white && this[x - 2, y + 1] == Piece W_Knight))) return true
+        if ((x + 2 <= 'H' && y + 1 <= 8) && ((white && this[x + 2 , y + 1] == Piece B_Knight) || (!white && this[x + 2, y + 1] == Piece W_Knight))) return true
         
         
         // Check by opposite king? (To avoid king stepping in to check)
